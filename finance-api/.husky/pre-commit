@@ -1,0 +1,3 @@
+cd finance-api
+npx lint-staged
+
