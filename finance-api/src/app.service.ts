@@ -5,6 +5,6 @@ import { Postgres } from './db/postgres/postgres';
 export class AppService {
   constructor(@Inject(Postgres) private readonly dbClient: Postgres) {}
   async getHello() {
-    return await this.dbClient.connect({ query: 'SELECT * FROM public.user;' });
+    return await this.dbClient.exec({ query: 'SELECT * FROM public.user;' });
   }
 }

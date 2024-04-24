@@ -1,4 +1,4 @@
-export interface Connect {
+export interface QueryParams {
   query: string;
   params?: string[];
 }
