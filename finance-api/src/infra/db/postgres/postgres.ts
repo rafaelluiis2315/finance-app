@@ -31,8 +31,6 @@ export class Postgres {
       await this.connect();
       const result = await this.query({ query, params });
       return result;
-    } catch (error) {
-      console.error(error);
     } finally {
       this.disconnect();
     }
