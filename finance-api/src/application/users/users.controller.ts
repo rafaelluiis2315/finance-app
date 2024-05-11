@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { CreateUserUseCase } from '../use-cases/user/create-user';
@@ -29,6 +30,11 @@ export class UserController {
     if (!isIdValid) {
       throw new BadRequestException('The provided id is not valid.');
     }
-    return await this.getUserById.execute(id);
+
+    const user = await this.getUserById.execute(id);
+
+    if (!user) throw new NotFoundException('User not found');
+
+    return user;
   }
 }
