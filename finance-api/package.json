@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "postinstall": "npm run prepare",
     "prepare": "cd .. && husky finance-api/.husky",
-    "migration": "ts-node -r tsconfig-paths/register ./src/db/postgres/migrations/exec.ts"
+    "migration": "ts-node -r tsconfig-paths/register ./src/infra/db/postgres/migrations/exec.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
