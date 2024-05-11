@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Body,
-  InternalServerErrorException,
   Get,
   Param,
   BadRequestException,
@@ -21,12 +20,7 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    try {
-      return await this.createUser.execute(createUserDto);
-    } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException('Internal server error');
-    }
+    return await this.createUser.execute(createUserDto);
   }
 
   @Get(':id')
