@@ -6,17 +6,21 @@ import {
   Param,
   BadRequestException,
   NotFoundException,
+  Patch,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { CreateUserUseCase } from '../use-cases/user/create-user';
 import { GetUserByIdUseCase } from '../use-cases/user/get-user- by-id';
 import { isUUID } from 'class-validator';
+import { UpdateUserUseCase } from '../use-cases/user/update-user';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UserController {
   constructor(
     private readonly createUser: CreateUserUseCase,
     private readonly getUserById: GetUserByIdUseCase,
+    private readonly updateUser: UpdateUserUseCase,
   ) {}
 
   @Post()
@@ -32,6 +36,20 @@ export class UserController {
     }
 
     const user = await this.getUserById.execute(id);
+
+    if (!user) throw new NotFoundException('User not found');
+
+    return user;
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateUser: UpdateUserDto) {
+    const isIdValid = isUUID(id);
+    if (!isIdValid) {
+      throw new BadRequestException('The provided id is not valid.');
+    }
+
+    const user = await this.updateUser.execute(id, updateUser);
 
     if (!user) throw new NotFoundException('User not found');
 
