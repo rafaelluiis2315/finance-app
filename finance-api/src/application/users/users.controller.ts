@@ -4,18 +4,17 @@ import {
   Body,
   Get,
   Param,
-  BadRequestException,
-  NotFoundException,
   Patch,
   Delete,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { CreateUserUseCase } from '../use-cases/user/create-user';
 import { GetUserByIdUseCase } from '../use-cases/user/get-user-by-id';
-import { isUUID } from 'class-validator';
 import { UpdateUserUseCase } from '../use-cases/user/update-user';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DeleteUserUseCase } from '../use-cases/user/delete-user';
+import { checkIdIsValid } from '../helpers/user';
+import { InvalidIdError, UserNotFoundError } from '../errors/user.exception';
 
 @Controller('users')
 export class UserController {
@@ -33,42 +32,39 @@ export class UserController {
 
   @Get(':id')
   async getById(@Param('id') id: string) {
-    const isIdValid = isUUID(id);
-    if (!isIdValid) {
-      throw new BadRequestException('The provided id is not valid.');
+    if (!checkIdIsValid(id)) {
+      throw new InvalidIdError();
     }
 
     const user = await this.getUserById.execute(id);
 
-    if (!user) throw new NotFoundException('User not found.');
+    if (!user) throw new UserNotFoundError();
 
     return user;
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUser: UpdateUserDto) {
-    const isIdValid = isUUID(id);
-    if (!isIdValid) {
-      throw new BadRequestException('The provided id is not valid.');
+    if (!checkIdIsValid(id)) {
+      throw new InvalidIdError();
     }
 
     const user = await this.updateUser.execute(id, updateUser);
 
-    if (!user) throw new NotFoundException('User not found.');
+    if (!user) throw new UserNotFoundError();
 
     return user;
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    const isIdValid = isUUID(id);
-    if (!isIdValid) {
-      throw new BadRequestException('The provided id is not valid.');
+    if (!checkIdIsValid(id)) {
+      throw new InvalidIdError();
     }
 
     const userDeleted = await this.deleteUser.execute(id);
 
-    if (!userDeleted) throw new NotFoundException('User not found.');
+    if (!userDeleted) throw new UserNotFoundError();
 
     return userDeleted;
   }
