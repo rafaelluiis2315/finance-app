@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { PostgresGetUserByIdRepository } from 'src/infra/repository/postgres/get-user-by-id';
+import { PostgresGetUserByIdRepository } from 'src/infra/repository/postgres/user/get-user-by-id';
 
 export class GetUserByIdUseCase {
   constructor(

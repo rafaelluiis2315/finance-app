@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { PostgresDeleteUserRepository } from 'src/infra/repository/postgres/delete-user';
+import { PostgresDeleteUserRepository } from 'src/infra/repository/postgres/user/delete-user';
 
 export class DeleteUserUseCase {
   constructor(
@@ -7,7 +7,7 @@ export class DeleteUserUseCase {
     private readonly deleteUserRepository: PostgresDeleteUserRepository,
   ) {}
 
-  async execute(userId) {
+  async execute(userId: string) {
     return await this.deleteUserRepository.execute(userId);
   }
 }

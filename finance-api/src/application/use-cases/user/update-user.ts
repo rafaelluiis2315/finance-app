@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { PostgresGetUserByEmailRepository } from 'src/infra/repository/postgres/get-user-by-email';
+import { PostgresGetUserByEmailRepository } from 'src/infra/repository/postgres/user/get-user-by-email';
 import { EmailAlreadyInUseError } from 'src/application/errors/user.exception';
-import { PostgresUpdateUserRepository } from 'src/infra/repository/postgres/update-user';
+import { PostgresUpdateUserRepository } from 'src/infra/repository/postgres/user/update-user';
 
 interface UpdateUserParams {
   first_name?: string;

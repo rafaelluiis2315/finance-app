@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PostgresCreateUserRepository } from 'src/infra/repository/postgres/create-user';
+import { PostgresCreateUserRepository } from 'src/infra/repository/postgres/user/create-user';
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcrypt';
-import { PostgresGetUserByEmailRepository } from 'src/infra/repository/postgres/get-user-by-email';
+import { PostgresGetUserByEmailRepository } from 'src/infra/repository/postgres/user/get-user-by-email';
 import { EmailAlreadyInUseError } from 'src/application/errors/user.exception';
 
 interface CreateUserParams {
