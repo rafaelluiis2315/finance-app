@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS transactions (
   ID UUID PRIMARY KEY,
   user_id UUID REFERENCES users(ID) ON DELETE CASCADE NOT NULL,
   name VARCHAR(100) NOT NULL,
-  description VARCHAR(255),
-  amount DECIMAL(10, 2) NOT NULL,
+  date DATE NOT NULL,
+  amount NUMERIC(10, 2) NOT NULL,
   type transaction_type NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW()
