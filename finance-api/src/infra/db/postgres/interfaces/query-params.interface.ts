@@ -1,4 +1,6 @@
-export interface QueryParams {
-  query: string;
-  params?: string[];
+import { QueryConfig, QueryConfigValues } from 'pg';
+
+export interface QueryParams<I> {
+  query: string | QueryConfig<I>;
+  params?: QueryConfigValues<I>;
 }

@@ -1,5 +1,5 @@
 import { Global, Injectable } from '@nestjs/common';
-import { Pool, PoolClient } from 'pg';
+import { Pool, PoolClient, QueryResultRow } from 'pg';
 import { QueryParams } from './interfaces/query-params.interface';
 
 @Global()
@@ -18,19 +18,17 @@ export class Postgres {
     this.client = await this.pool.connect();
   }
 
-  private async query({ query, params }: QueryParams) {
-    return (await this.client.query(query, params)).rows;
-  }
-
   private async disconnect() {
     this.client.release();
   }
 
-  async exec({ query, params }: QueryParams) {
+  async exec<R extends QueryResultRow = any, I = any[]>({
+    query,
+    params,
+  }: QueryParams<I>): Promise<Array<R>> {
     try {
       await this.connect();
-      const result = await this.query({ query, params });
-      return result;
+      return (await this.client.query(query, params)).rows;
     } finally {
       this.disconnect();
     }
