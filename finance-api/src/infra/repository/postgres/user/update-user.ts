@@ -1,5 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { Postgres } from 'src/infra/db/postgres/postgres';
+import { User } from 'src/model/user.entity';
 
 interface UpdateUserParams {
   first_name?: string;
@@ -29,7 +30,7 @@ export class PostgresUpdateUserRepository {
       RETURNING *;
     `;
 
-    const updatedUser = await this.postgresClient.exec({
+    const updatedUser = await this.postgresClient.exec<User>({
       query: query,
       params: updateValues,
     });
