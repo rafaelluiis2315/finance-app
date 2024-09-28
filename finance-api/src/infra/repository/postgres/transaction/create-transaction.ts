@@ -1,16 +1,9 @@
 import { Inject } from '@nestjs/common';
 import { Postgres } from 'src/infra/db/postgres/postgres';
-import { TransactionType } from 'src/model/enum/transaction-type.enum';
 import { Transaction } from 'src/model/transaction.entity';
 
-interface CreateTransactionParams {
-  id: string;
-  userId: string;
-  name: string;
-  date: Date;
-  amount: number;
-  type: TransactionType;
-}
+interface CreateTransactionParams
+  extends Omit<Transaction, 'createdAt' | 'updatedAt'> {}
 
 export class PostgresCreateTransactionRepository {
   constructor(@Inject(Postgres) private readonly postgresClient: Postgres) {}
