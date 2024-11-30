@@ -1,17 +1,20 @@
-import { Controller, Post, Body, Inject } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 
-import { checkIdIsValid } from '../helpers/user';
-import { InvalidIdError } from '../errors/user.exception';
-import { CreateTransactionUseCase } from '../use-cases/transaction/create-transaction';
 import { isCurrency } from 'class-validator';
 import { AmountNotCurrencyError } from '../errors/transaction.exception';
+import { InvalidIdError } from '../errors/user.exception';
+import { checkIdIsValid } from '../helpers/user';
+import { CreateTransactionUseCase } from '../use-cases/transaction/create-transaction';
+import { GetTransactionsByUserIdUseCase } from '../use-cases/transaction/get-transactions-by-user-id';
 
 @Controller('transactions')
 export class TransactionsController {
   constructor(
     @Inject(CreateTransactionUseCase)
     private readonly createTransactionUseCase: CreateTransactionUseCase,
+    @Inject(GetTransactionsByUserIdUseCase)
+    private readonly getTransactionsByUserIdUseCase: GetTransactionsByUserIdUseCase,
   ) {}
 
   @Post()
@@ -34,5 +37,14 @@ export class TransactionsController {
     }
 
     return this.createTransactionUseCase.execute(createTransactionDto);
+  }
+
+  @Get()
+  async getTransactionsByUser(@Query('userId') userId: string) {
+    if (!checkIdIsValid(userId)) {
+      throw new InvalidIdError();
+    }
+
+    return this.getTransactionsByUserIdUseCase.execute(userId);
   }
 }
