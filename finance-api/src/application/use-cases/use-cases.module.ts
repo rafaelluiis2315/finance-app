@@ -7,6 +7,7 @@ import { RepositoryModule } from 'src/infra/repository/repository.module';
 import { CreateTransactionUseCase } from './transaction/create-transaction';
 import { GetTransactionsByUserIdUseCase } from './transaction/get-transactions-by-user-id';
 import { UpdateTransactionUseCase } from './transaction/update-transaction';
+import { DeleteTransactionUseCase } from './transaction/delete-transaction';
 
 @Module({
   imports: [RepositoryModule],
@@ -18,6 +19,7 @@ import { UpdateTransactionUseCase } from './transaction/update-transaction';
     CreateTransactionUseCase,
     GetTransactionsByUserIdUseCase,
     UpdateTransactionUseCase,
+    DeleteTransactionUseCase,
   ],
   exports: [
     CreateUserUseCase,
@@ -27,6 +29,7 @@ import { UpdateTransactionUseCase } from './transaction/update-transaction';
     CreateTransactionUseCase,
     GetTransactionsByUserIdUseCase,
     UpdateTransactionUseCase,
+    DeleteTransactionUseCase,
   ],
 })
 export class UseCasesModule {}
