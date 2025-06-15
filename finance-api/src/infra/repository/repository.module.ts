@@ -6,6 +6,7 @@ import { PostgresUpdateUserRepository } from './postgres/user/update-user';
 import { PostgresDeleteUserRepository } from './postgres/user/delete-user';
 import { PostgresCreateTransactionRepository } from './postgres/transaction/create-transaction';
 import { PostgresGetTransactionsByUserIdRepository } from './postgres/transaction/get-transactions-by-user-id';
+import { PostgresUpdateTransactionRepository } from './postgres/transaction/update-transaction';
 
 @Module({
   providers: [
@@ -16,6 +17,7 @@ import { PostgresGetTransactionsByUserIdRepository } from './postgres/transactio
     PostgresDeleteUserRepository,
     PostgresCreateTransactionRepository,
     PostgresGetTransactionsByUserIdRepository,
+    PostgresUpdateTransactionRepository,
   ],
   exports: [
     PostgresCreateUserRepository,
@@ -25,6 +27,7 @@ import { PostgresGetTransactionsByUserIdRepository } from './postgres/transactio
     PostgresDeleteUserRepository,
     PostgresCreateTransactionRepository,
     PostgresGetTransactionsByUserIdRepository,
+    PostgresUpdateTransactionRepository,
   ],
 })
 export class RepositoryModule {}
