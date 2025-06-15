@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   Inject,
@@ -12,13 +13,17 @@ import {
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 
 import { isCurrency } from 'class-validator';
-import { AmountNotCurrencyError } from '../errors/transaction.exception';
+import {
+  AmountNotCurrencyError,
+  TransactionNotFoundError,
+} from '../errors/transaction.exception';
 import { InvalidIdError } from '../errors/user.exception';
 import { checkIdIsValid } from '../helpers/user';
 import { CreateTransactionUseCase } from '../use-cases/transaction/create-transaction';
 import { GetTransactionsByUserIdUseCase } from '../use-cases/transaction/get-transactions-by-user-id';
 import { UpdateTransactionUseCase } from '../use-cases/transaction/update-transaction';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { DeleteTransactionUseCase } from '../use-cases/transaction/delete-transaction';
 
 @Controller('transactions')
 export class TransactionsController {
@@ -29,6 +34,8 @@ export class TransactionsController {
     private readonly getTransactionsByUserIdUseCase: GetTransactionsByUserIdUseCase,
     @Inject(UpdateTransactionUseCase)
     private readonly updateTransactionUseCase: UpdateTransactionUseCase,
+    @Inject(DeleteTransactionUseCase)
+    private readonly deleteTransactionUseCase: DeleteTransactionUseCase,
   ) {}
 
   @Post()
@@ -81,5 +88,18 @@ export class TransactionsController {
     });
 
     return transaction;
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    if (!checkIdIsValid(id)) {
+      throw new InvalidIdError();
+    }
+
+    const transactionDeleted = await this.deleteTransactionUseCase.execute(id);
+
+    if (!transactionDeleted) throw new TransactionNotFoundError();
+
+    return transactionDeleted;
   }
 }
