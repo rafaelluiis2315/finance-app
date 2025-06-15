@@ -15,19 +15,21 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { DeleteUserUseCase } from '../use-cases/user/delete-user';
 import { checkIdIsValid } from '../helpers/user';
 import { InvalidIdError, UserNotFoundError } from '../errors/user.exception';
+import { GetUserBalanceUseCase } from '../use-cases/user/get-user-balance';
 
 @Controller('users')
 export class UserController {
   constructor(
-    private readonly createUser: CreateUserUseCase,
-    private readonly getUserById: GetUserByIdUseCase,
-    private readonly updateUser: UpdateUserUseCase,
-    private readonly deleteUser: DeleteUserUseCase,
+    private readonly createUserUseCase: CreateUserUseCase,
+    private readonly getUserByIdUseCase: GetUserByIdUseCase,
+    private readonly updateUserUseCase: UpdateUserUseCase,
+    private readonly deleteUserUseCase: DeleteUserUseCase,
+    private readonly getUserBalanceUseCase: GetUserBalanceUseCase, // Assuming this is the correct use case for balance retrieval
   ) {}
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    return await this.createUser.execute(createUserDto);
+    return await this.createUserUseCase.execute(createUserDto);
   }
 
   @Get(':id')
@@ -36,7 +38,7 @@ export class UserController {
       throw new InvalidIdError();
     }
 
-    const user = await this.getUserById.execute(id);
+    const user = await this.getUserByIdUseCase.execute(id);
 
     if (!user) throw new UserNotFoundError();
 
@@ -49,7 +51,7 @@ export class UserController {
       throw new InvalidIdError();
     }
 
-    const user = await this.updateUser.execute(id, updateUser);
+    const user = await this.updateUserUseCase.execute(id, updateUser);
 
     if (!user) throw new UserNotFoundError();
 
@@ -62,10 +64,21 @@ export class UserController {
       throw new InvalidIdError();
     }
 
-    const userDeleted = await this.deleteUser.execute(id);
+    const userDeleted = await this.deleteUserUseCase.execute(id);
 
     if (!userDeleted) throw new UserNotFoundError();
 
     return userDeleted;
+  }
+
+  @Get(':id/balance')
+  async getUserBalance(@Param('id') id: string) {
+    if (!checkIdIsValid(id)) {
+      throw new InvalidIdError();
+    }
+
+    const userBalance = await this.getUserBalanceUseCase.execute(id);
+
+    return userBalance;
   }
 }
