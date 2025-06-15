@@ -26,8 +26,6 @@ export class PostgresUpdateTransactionRepository {
          RETURNING *;
        `;
 
-    console.log('Executing query:', query);
-
     const updatedUser = await this.postgresClient.exec<Transaction>({
       query: query,
       params: updateValues,
