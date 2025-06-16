@@ -1,17 +1,24 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-require('dotenv').config();
+import * as fs from 'fs';
+import * as path from 'path';
 import { Postgres } from '../postgres';
-const fs = require('fs');
-const path = require('path');
+import 'dotenv/config';
 
 const execMigrations = async () => {
-  const filePath = path.join(__dirname, '01-init.sql');
-  const script = fs.readFileSync(filePath, 'utf8');
-
   const client = new Postgres();
-  await client.exec({ query: script });
+  const files = fs
+    .readdirSync(__dirname)
+    .filter((file) => file.endsWith('.sql'));
 
-  console.info('Migration executed successfully');
+  for (const file of files) {
+    const filePath = path.join(__dirname, file);
+    const script = fs.readFileSync(filePath, 'utf8');
+
+    await client.exec({ query: script });
+
+    console.log(`Migration for file ${file} executed successfully.`);
+  }
+
+  console.log('All migrations executed successfully!');
 };
 
 execMigrations();
